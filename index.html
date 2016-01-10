@@ -1,0 +1,170 @@
+<html>
+	<head>
+	</head>
+	<body>
+		<div align="center">
+			<h1 align = "center"> O que � github ? </h1>
+			<div align ="left"> O Git � um programa de controle de vers�es, onde voc� trabalha sempre em um mesmo diret�rio, fazendo altera��es em seu projeto, gravando documenta��o e coment�rios.<br>
+
+Ele guarda tudo que voc� faz. Todas as vezes que voc� salvar e �aprovar� no Git, ele registra.<br>
+
+E para que ele registra ? Para que voc� possa voltar ao anterior quando acontecer algum problema, rs.<br>
+
+Alterou o cadclie. Executou, n�o era isso, volte para a vers�o anterior.<br>
+Ele � uma esp�cie de Dropbox, um armazenamento em Nuvel (Cloud) que voc� envia seus arquivos quando est� com seu trabalho pronto (ou parte dele) via git<br>
+
+Como seu projeto est� no Github, suponhamos que voc� esteja viajando, ou comprou um novo notebook ou mesmo o seu quebrou. Pronto, entre no Github e baixe todo seu projeto.<br>
+
+			</div>
+		</div>
+		<div align ="center">
+			<h1 align ="center"> Comandos Basicos do Git</h1>
+			<div align="center"> 
+				<div align="left"> 
+					<h2 align ="left"> Criando Um Repositorio</h2>
+					Para criar um reposit�rio no GitHub, clique no bot�o New repository dispon�vel na sua p�gina inicial, especifique um nome e opcionalmente uma descri��o. Aqui neste exemplo vou criar um repo chamado git-teste, que est� dispon�vel em (https://github.com/fernandomayer/git-teste).<br>
+
+At� aqui o reposit�rio foi criado no GitHub, e isso � importante pois agora temos um endere�o no servidor para onde vamos enviar os arquivos criados localmente. Agora � a hora de criar um diret�rio local e iniciar o Git fazendo ele se comunicar com o servidor. Para isso fazemos<br>
+
+# cria o diret�rio<br>
+$ mkdir git-teste<br>
+# entra<br>
+$ cd git-teste<br>
+# inicia o git<br>
+$ git init<br>
+O comando git init serve para "iniciar" o rastreamento de arquivos pelo Git. Esse comando cria um diret�rio (oculto) .git, contendo as configura��es necess�rias para o funcionamento do sistema. Esse comando s� � necess�rio uma vez.<br>
+
+Para informar o Git que este diret�rio deve se comunicar com o servidor do GitHub criado acima fazemos<br>
+
+$ git remote add origin git@github.com:fernandomayer/git-teste.git<br>
+O comando git remote add serve para adicionar um reposit�rio "remoto", que por padr�o o Git chama de origin, e que nada mais � do que um "atalho" para o endere�o do servidor. Note que neste caso estamos usando um endere�o no formato do SSH, mas poderia ser tamb�m o endere�o https.<br>
+
+Nesse ponto podemos utilizar o comando git status para verificar o que est� contecendo no reposit�rio<br>
+
+$ git status <br>
+# On branch master<br>
+#
+# Initial commit<br>
+#
+nothing to commit (create/copy files and use "git add" to track)<br>
+Duas coisas chamam a aten��o: o Git est� mostrando que estamos em um branch (ramo) chamado master, e que n�o h� nada para ser enviado ou adicionado ao reposit�rio (commit). Um branch � como uma "linha de desenvolvimento", sendo que sempre deve existir uma principal (que por padr�o � chamada de master), mas podem existir muitas outras. Por enquanto vamos trabalhar apenas com o branch principal.<br>
+					<h2 align ="left"> Criando e rastreando arquivos</h2>
+					Para come�ar a usar o Git precisamos criar arquivos. No GitHub, um arquivo chamdo README serve para identificar um projeto e aparece autoomaticamente na p�gina principal do reposit�rio. Por isso, vamos criar esse arquivo (usando um editor de texto qualquer) e adicionar algum texto como<br>
+
+Reposit�rio criado para testes com o GitHub.<br>
+Depois de salvar o arquivo podemos ver novamente o status<br>
+
+$ git status <br>
+# On branch master<br>
+#<br>
+# Initial commit<br>
+#<br>
+# Untracked files:<br>
+#   (use "git add <file>..." to include in what will be committed)<br>
+#<br>
+#   README<br>
+nothing added to commit but untracked files present (use "git add" to track)<br>
+Agora vemos que o Git automaticamente identificou que existe um arquivo criado no reposit�rio, mas ele ainda n�o est� sendo rastreado. Se quisermos que o Git rastreie todas as modifica��es de um arquivo temos que adicion�-lo ao reposit�rio com o comando git add<br>
+
+$ git add README<br>
+E o status ir� mostrar que o arquivo foi adicionado, mas ainda n�o foi enviado para o reposit�rio local<br>
+<br>
+$ git status <br>
+# On branch master<br>
+#<br>
+# Initial commit<br>
+#<br>
+# Changes to be committed:<br>
+#   (use "git rm --cached <file>..." to unstage)<br>
+#<br>
+#   new file:   README<br>
+#<br>
+Nesse momento, o arquivo est� em uma staging area, ou um lugar pronto para ser enviado ao reposit�rio local. At� aqui o arquivo n�o faz parte do reposit�rio do Git! Para isso temos que "envi�-lo", ou fazer um commit<br>
+<br>
+$ git commit -m 'coment�rio'<br>
+[master (root-commit) 1490ab0] primeiro commit<br>
+ 1 file changed, 1 insertion(+)<br>
+ create mode 100644 README<br>
+$ git status <br>
+# On branch master<br>
+nothing to commit (working directory clean)<br>
+Repare que a flag -m serve para adicionar um coment�rio sobre o commit que voc� est� fazendo. Adicionar um coment�rio � obrigat�rio para todos os commits. Se voc� n�o usar o -m, o editor de texto padr�o do seu sistema (ou aquele configurado inicialmente com core.editor, ver a etapa de configura��o) ir� abrir para que voc� entre com uma mensagem.<br>
+<br>
+Alternativamente, podemos adicionar o arquivo (git add) e fazer o commit (git commit) em apenas uma etapa, usando a op��o -a no commit<br>
+<br>
+$ git commit -a -m 'coment�rio'<br>
+Dessa forma o arquivo � indexado diretamente, sem passar pela staging area. A vantagem � que elimina um comando. A desvantagem � que n�o existe mais a chance de reverter um arquivo (unstage) antes de comitar.<br>
+<br>
+Agora que o arquivo foi comitado, ele faz parte do reposit�rio do Git, mas apenas localmente. Para envi�-lo ao servidor remoto (j� configurado), usamos o comando git push com dois argumentos. O primeiro indica o servidor remoto (origin), e o segundo o branch (master)<br>
+Writing objects: 100% (3/3), 258 bytes, done.<br>
+Total 3 (delta 0), reused 0 (delta 0)<br>
+To git@github.com:fernandomayer/git-teste.git<br>
+ * [new branch]      master -> master<br>
+					<h2 align ="left"> Alguns comandos �teis</h2>
+					<h3 align ="left"> Remover e mover arquivos</h3>
+						Comandos similares aos do shell rm e mv, mas mant�m a rastreabilidade do git<br>
+
+$ git rm foo.R<br>
+$ git mv foo.R<br>
+Para remover arquivos do repositorio remoto, mas manter localmente<br>
+<br>
+$ git rm --cached foo.R<br>
+este comando � �til se voc� enviou para o reposit�rio remoto algum arquivo que n�o deveria ou n�o precisava (como arquivos de compila��o do LaTeX, ...). Para evitar que isso aconte�a � poss�vel criar um arquivo chamado .gitignore contendo os arquivos que n�o precisam ser enviados ao servidor remoto<br>
+					<h3 align ="left"> Logs</h3>
+					Mostra o log das altera��es nos arquivos (mensagens de commit)<br>
+<br>
+$ git log<br>
+# em uma linha<br>
+$ git log --pretty=oneline<br>
+					<h3 align ="left"> Recuperando vers�es de arquivos</h3>
+					Para reverter um �nico arquivo para uma vers�o anterior (sabendo que o arquivo � foo.R e o hash SHA do commit �, por exemplo, 03f9c0abe911440339ecb82e08ec8ae65ca11a7b)<br>
+<br>
+$ git checkout 03f9c0a foo.R<br>
+Para reverter um unico arquivo para uma versao anterior (sendo que esse arquivo foi DELETADO em algum commit anterior) se voce nao lembra o nome do arquivo, execute esse comando que identifica os modos 'delete'<br>
+<br>
+$ git log --diff-filter=D --summary | grep delete<br>
+Sabendo o nome do arquivo, voce pode conferir o log para identificar o commit que o deletou<br>
+<br>
+$ git log -- <arquivo-deletado><br>
+NOTE que se o arquivo estava em um sub-diretorio dentro do seu projeto, ele deve ser especificado com o caminho relativo para esse diretorio. Para ter certeza do commit que deletou o arquivo, veja<br>
+<br>
+$ git rev-list -n 1 HEAD -- <arquivo-deletado><br>
+E finalmente para recuperar o arquivo faca o checkout no commit anterior (por isso o ^ ao final do commit)<br>
+<br>
+$ git checkout <commit-que-deletou>^ -- <arquivo-deletado><br>
+O arquivo deletado devera voltar para o diretorio (ou sub-diretorio se ele estava em um) como um novo arquivo.<br>
+					<h3 align ="left"> Commits</h3>
+					Para corrigir uma mensagem de commit que ainda n�o foi enviada para um remote. Essa ser� a mensagem utilizada nos logs e ir� substituir qualquer outra anterior<br>
+<br>
+$ git commit --amend -m 'mensagem nova'<br>
+					<h3 align ="left"> Tags</h3><br>
+					Criar tags em determinados pontos de um projeto � uma maneira eficaz de poder voltar facilmente naquele ponto e verificar a situa��o dos arquivos naquele momento. No desenvolvimento de um software por exemplo, os tags podem marcar as vers�es (ex.: v0.1, v0.2, ...) do c�digo ao longo do tempo.<br>
+<br>
+No git, as tags podem ser leves (lightweight) ou anotadas (annotated). A diferen�a � que uma tag leve � s� um "ponteiro" para um commit espec�fico, enquanto que uma tag anotada � como se fosse um novo commit: ela armazena o nome de quem criou a tag, e-mail, data, e uma mensagem.<br>
+<br>
+Para criar uma tag leve fa�a<br>
+<br>
+git tag v0.1<br>
+Para criar uma tag anotada (geralmente mais recomendado), fa�a:<br>
+<br>
+git tag -a v0.1 -m 'mensagem de commit'<br>
+A mensagem de commit aqui tamb�m � obrigat�ria. Se voc� n�o especificar com a op��o -m, um editor ir� abrir para voc� inserir uma mensagem.<br>
+<br>
+Para verificar as tags existentes ou criadas, veja<br>
+<br>
+git tag -l<br>
+Para ver todos os commits especificos associados a uma tag, use<br>
+<br>
+git show v0.1<br>
+IMPORTANTE: se voc� est� trabalhando com um reposit�rio remoto (como o GitHub), � necess�rio dar um push espec�fico para que a tag tamb�m seja enviada para o servidor. As tags criadas acima s�o apenas locais. Para enviar a tag para o servidor, fa�a um push na tag:<br>
+				</div>
+			</div>
+		
+		</div>
+		<div align ="center">
+			<h1 align ="center">Video explicativo</h1>
+			<iframe width="560" height="315" src="https://www.youtube.com/embed/neDiLHwXSVo" frameborder="0" allowfullscreen></iframe>
+		</div>
+	</body>
+
+</html>
